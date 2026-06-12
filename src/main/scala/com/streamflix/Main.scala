@@ -2,21 +2,52 @@ package com.streamflix
 
 import configuration.Config
 import processor.Modelo1
-
-import org.apache.spark.SparkContext
+import processor.Modulo2
 import org.apache.spark.sql.SparkSession
 
-import java.io.PrintWriter
+import java.util.Scanner
 
 object Main {
 
   def main(args: Array[String]): Unit = {
-    println("Iniciando Main")
+    println("Cargando Librerías Spark, por favor espere...")
     val spark = SparkSession.builder().appName("Streamflix").master("local[*]").getOrCreate()
+    spark.sparkContext.setLogLevel("ERROR")
     val sc = spark.sparkContext
-    val path = Config.SERVER_LOGS_PATH
+
+    println("Librerías cargadas!")
+
+    val pathTxt = Config.SERVER_LOGS_PATH
+    val pathCsv = Config.MOVIES_METADATA_CSV
+
+    // CREAR UN MENU DE OPCIONES PARA SELECCIONAR MODULO A EJECUTAR
 
     val modulo1 = new Modelo1()
-    modulo1.iniciarModelo1(sc, path)
+    val modulo2 = new Modulo2()
+
+    val scc = new Scanner(System.in)
+
+    var corriendo = true
+    println("\n¡Bienvenido al sistema StreamFlix!")
+    while (corriendo) {
+      println("=== Sistema StreamFlix ===")
+      println("1. Módulo 1")
+      println("2. Módulo 2")
+      println("3. Módulo 3")
+      println("4. Módulo 4")
+      println("5. Módulo 5")
+      println("6. Salir")
+      println("\nEs necesario que elija una opción: ")
+      val opcion = scc.nextInt()
+
+      opcion match {
+        case 1 => modulo1.iniciarModelo1(sc, pathTxt)
+        case 2 => modulo2.iniciarModulo2(spark, sc, pathCsv)
+        case 6 =>
+          println("Saliendo del sistema...")
+          corriendo = false
+        case _ => println("Opción no válida...")
+      }
+    }
   }
 }
