@@ -1,8 +1,7 @@
 package com.streamflix
 
 import configuration.Config
-import processor.Modelo1
-import processor.Modulo2
+import processor.{Modelo1, Modulo2, Modulo3}
 import org.apache.spark.sql.SparkSession
 
 import java.util.Scanner
@@ -23,13 +22,14 @@ object Main {
     // CREAR UN MENU DE OPCIONES PARA SELECCIONAR MODULO A EJECUTAR
 
     val modulo1 = new Modelo1()
-    val modulo2 = new Modulo2()
+//    val modulo2 = new Modulo2()
+    val modulo3 = new Modulo3()
 
     val scc = new Scanner(System.in)
 
     var corriendo = true
     println("\n¡Bienvenido al sistema StreamFlix!")
-    while (corriendo) {
+    while (corriendo) {3
       println("=== Sistema StreamFlix ===")
       println("1. Módulo 1")
       println("2. Módulo 2")
@@ -42,7 +42,8 @@ object Main {
 
       opcion match {
         case 1 => modulo1.iniciarModelo1(sc, pathTxt)
-        case 2 => modulo2.iniciarModulo2(spark, sc, pathCsv)
+        case 2 => Modulo2.iniciarModulo2(spark, sc, pathCsv)
+        case 3 => modulo3.iniciarModulo3(spark, pathTxt, pathCsv)
         case 6 =>
           println("Saliendo del sistema...")
           corriendo = false

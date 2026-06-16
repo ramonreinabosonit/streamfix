@@ -3,21 +3,22 @@ package com.streamflix.processor
 import com.streamflix.configuration.Config
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.SparkSession
 
 import java.io.PrintWriter
 
 class Modelo1 {
-
-//  val spark = SparkSession.builder().appName("Streamflix").master("local[*]").getOrCreate()
-//  val sc = spark.sparkContext
-//  val path = Config.SERVER_LOGS_PATH
 
   def iniciarModelo1(sc: SparkContext, path: String): Unit = {
 
     // cambiarlo para coger rutas de ficheros en un arhcivo de constantes
     val rawLogsRDD = sc.textFile(path)
 
+    tarea1(rawLogsRDD)
+    tarea2(rawLogsRDD)
+    tarea3(rawLogsRDD)
+    tarea4(rawLogsRDD)
+
+    // RESULTADOS POR CONSOLA
     contarCorruptos(rawLogsRDD)
     generarFichero(rawLogsRDD)
 
@@ -26,7 +27,7 @@ class Modelo1 {
 
   def tarea1(rawLogsRDD: RDD[String]): Unit = {
     val filtradoNivel = rawLogsRDD.filter(x=>x.contains("[ERROR]") || x.contains("[INFO]"))
-    println("\nCOUNT:"+filtradoNivel.count())
+//    println("\nCOUNT:"+filtradoNivel.count())
   }
 
   def tarea2(rawLogsRDD: RDD[String]): Unit = {
@@ -38,25 +39,25 @@ class Modelo1 {
           // para coger en el string el | hay que poner \\
           val a = cadena.split("\\|")(3)
           (e,a)
-      }.take(10).foreach(println)
+      }//.take(10).foreach(println)
   }
 
   // tarea 3
   def tarea3(rawLogsRDD: RDD[String]): Unit = {
-    println("\nCOUNT: "+rawLogsRDD.filter(x=>x.contains("Code:503")).count())
+      rawLogsRDD.filter(x=>x.contains("Code:503")).count()
+//    println("\nCOUNT: "+rawLogsRDD.filter(x=>x.contains("Code:503")).count())
   }
 
   // tarea 4
   def tarea4(rawLogsRDD: RDD[String]): Unit = {
     val total = rawLogsRDD.filter(x=>x.contains("INFO") || x.contains("WARN") || x.contains("ERROR")).count()
     val errores = rawLogsRDD.filter(x=>x.contains("ERROR")).count()
+    val media = (errores.toDouble / total) * 100
 
-    println("Total"+total)
-    println(errores)
-    println("\nMEDIAAA: "+(errores.toDouble / total) * 100)
+//    println("Total"+total)
+//    println(errores)
+//    println(s"\nMedia: $media")
   }
-
-  // comprobar si salta la excepcion y cual es para controlarla (collect)
 
   // CONTAR LINEAS CORRUPTAS
   def contarCorruptos(rawLogsRDD: RDD[String]): Unit = {
@@ -65,10 +66,8 @@ class Modelo1 {
   }
 
   // CREAR FICHERO (Codigo, Cantidad)
-
   def generarFichero(rawLogsRDD: RDD[String]): Unit = {
-    val pw = new PrintWriter("C:/Users/ramon.reina/IdeaProjects/streamflix/src/main/scala/resources/output/error_counts.txt")
-    // (Codigo, Cantidad)
+    val pw = new PrintWriter(Config.ERROR_COUNTS_TXT_PATH)
     val info = rawLogsRDD.filter(x=>x.contains("[INFO]")).count()
     val warn = rawLogsRDD.filter(x=>x.contains("[WARN]")).count()
     val error = rawLogsRDD.filter(x=>x.contains("[ERROR]")).count()
@@ -76,10 +75,8 @@ class Modelo1 {
     pw.write(s"(INFO, $info)\n")
     pw.write(s"(WARN, $warn)\n")
     pw.write(s"(ERROR, $error)")
-
+    println("Fichero Creado!")
     pw.close()
-
-    println("ESCRITO!")
   }
 
 }

@@ -5,7 +5,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.types.{DateType, DoubleType, LongType, StringType, StructField, StructType}
 import org.apache.spark.sql.functions._
 
-class Modulo2 {
+object Modulo2 {
 
     def iniciarModulo2(spark: SparkSession, sc: SparkContext, path: String): Unit = {
       val customSchema = StructType(Array(StructField("id", LongType, nullable = false),
@@ -24,6 +24,9 @@ class Modulo2 {
       val dfNoNulos = reemplazarNulos(dfFormateado)
       dfNoNulos.show(5)
       dfNoNulos.printSchema()
+
+      // guardar en memoria???
+      dfNoNulos.createTempView("moviesDF")
     }
 
   def limpiezaDFPrecioGenero(moviesDF: DataFrame): DataFrame = {
@@ -39,6 +42,7 @@ class Modulo2 {
       x=>val total = dfFormateado.filter(col(x).isNull).count()
         println(s"$x -> $total nulos")
     }
+
     println("==========================================")
 
     // parte de duplicados
