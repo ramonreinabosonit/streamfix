@@ -8,7 +8,7 @@ import org.apache.spark.sql.functions.{broadcast, col, explode, split, sum, desc
 
 class Modulo3 {
 
-  def iniciarModulo3(spark: SparkSession, pathTxt: String, pathCsv: String): Unit = {
+  def iniciarModulo3(pathTxt: String, pathCsv: String) (implicit spark: SparkSession): Unit = {
 
     // su columna default es value
     val pruebaDF = spark.read.text(pathTxt)
@@ -16,9 +16,9 @@ class Modulo3 {
 
     // creamos logs DF desde el fichero de logs
     val logsDF = pruebaDF.withColumn("prueba", split(col("value"), "\\|"))
-      .withColumn("user_id", split(col("prueba").getItem(1), ":") (1))
-      .withColumn("movie_id", split(col("prueba").getItem(2), ":") (1).substr(7,20))
-      .withColumn("duration_watched", split(col("prueba").getItem(3), ":") (1).cast(LongType))
+      .withColumn("user_id", split(col("prueba").getItem(1), ":")(1))
+      .withColumn("movie_id", split(col("prueba").getItem(2), ":")(1).substr(7, 20))
+      .withColumn("duration_watched", split(col("prueba").getItem(3), ":")(1).cast(LongType))
       .select("user_id", "movie_id", "duration_watched")
     logsDF.show(10)
 
@@ -32,41 +32,22 @@ class Modulo3 {
       StructField("country", StringType, nullable = false)
     ))
 
+    // Leemos de nuevo el DF y aplicamos los métodos hechos en el modulo 2
     // tener cuidado con los DF SON INMUTABLES!
     val moviesDF = spark.read.option("header", "true").schema(customSchema).option("mode", "DROPMALFORMED").csv(pathCsv)
-//    val moviesDFFiltro = Modulo2.limpiezaDFPrecioGenero(moviesDF)
-//    val moviesDFLimpio = Modulo2.reemplazarNulos(moviesDF)
+    //    val moviesDFFiltro = Modulo2.limpiezaDFPrecioGenero(moviesDF)
+    //    val moviesDFLimpio = Modulo2.reemplazarNulos(moviesDF)
+
 
     // Hacemos el join entre ambos DF mediante las columnas (movie_id, id)
     // se hace broadcast join -->
     val enrichedDF = logsDF.join(broadcast(moviesDF), logsDF("movie_id") === moviesDF("id"), "inner")
     enrichedDF.show(10)
 
-    println("IDS de Logs")
-    val logs = logsDF.select(col("movie_id")).distinct().orderBy(desc("movie_id"))
-    logs.show()
-    val movie = moviesDF.select(col("id")).distinct().orderBy(desc("id"))
-    movie.show()
-
-//    println("GENEROS MOVIES")
-//    val generos2 = moviesDF.select(col("genres")).distinct()
-//    generos2.show()
-//    println("GENEROS JOIN")
-//    val generos = enrichedDF.select(col("genres")).distinct()
-//    generos.show()
-
     // obtener géneros y contar horas de las películas
     val genreMetricsDF = enrichedDF.withColumn("genre", explode(split(col("genres"), "\\|")))
       .groupBy("genre").agg(sum("duration_watched").alias("total_hours"))
-
-    genreMetricsDF.show(10)
-//    mostrarDataFrames(logsDF, moviesDF)
-
+    println("=== TOP 5 GENEROS MAS VISTOS ===")
+    genreMetricsDF.orderBy(desc("total_hours")).show(5)
   }
-
-  // PRUEBA
-//  def mostrarDataFrames(logsDF: DataFrame, moviesDF: DataFrame): Unit = {
-//    logsDF.show(10)
-//    moviesDF.show(10)
-//  }
 }

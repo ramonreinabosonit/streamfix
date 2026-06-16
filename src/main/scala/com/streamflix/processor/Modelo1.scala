@@ -8,7 +8,7 @@ import java.io.PrintWriter
 
 class Modelo1 {
 
-  def iniciarModelo1(sc: SparkContext, path: String): Unit = {
+  def iniciarModelo1(path: String) (implicit sc: SparkContext): Unit = {
 
     // cambiarlo para coger rutas de ficheros en un arhcivo de constantes
     val rawLogsRDD = sc.textFile(path)

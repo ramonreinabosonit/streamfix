@@ -7,7 +7,7 @@ import org.apache.spark.sql.functions._
 
 object Modulo2 {
 
-    def iniciarModulo2(spark: SparkSession, sc: SparkContext, path: String): Unit = {
+    def iniciarModulo2(path: String) (implicit spark: SparkSession): Unit = {
       val customSchema = StructType(Array(StructField("id", LongType, nullable = false),
         StructField("title", StringType, nullable = false),
         StructField("genres", StringType, nullable = false),
