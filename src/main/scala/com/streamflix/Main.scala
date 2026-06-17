@@ -2,7 +2,7 @@ package com.streamflix
 
 import configuration.Config
 import org.apache.spark.SparkContext
-import processor.{Modelo1, Modulo2, Modulo3}
+import processor.{Modelo1, Modulo2, Modulo3, Modulo4}
 import org.apache.spark.sql.SparkSession
 
 import java.util.Scanner
@@ -29,7 +29,7 @@ object Main {
 
     val modulo1 = new Modelo1()
 //    val modulo2 = new Modulo2()
-    val modulo3 = new Modulo3()
+//    val modulo3 = new Modulo3()
 
     val scc = new Scanner(System.in)
 
@@ -49,7 +49,8 @@ object Main {
       opcion match {
         case 1 => modulo1.iniciarModelo1(pathTxt)
         case 2 => Modulo2.iniciarModulo2(pathCsv)
-        case 3 => modulo3.iniciarModulo3(pathTxt, pathCsv)
+        case 3 => Modulo3.iniciarModulo3(pathTxt, pathCsv)
+        case 4 => Modulo4.iniciarModulo4(pathTxt, pathCsv)
         case 6 =>
           println("Saliendo del sistema...")
           corriendo = false

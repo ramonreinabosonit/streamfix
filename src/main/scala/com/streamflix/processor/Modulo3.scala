@@ -6,7 +6,7 @@ import org.apache.spark.sql.types.{DateType, LongType, StringType, StructField, 
 import org.apache.spark.sql.functions.{broadcast, col, explode, split, sum, desc}
 //import org.apache.spark.sql.functions._
 
-class Modulo3 {
+object Modulo3 {
 
   def iniciarModulo3(pathTxt: String, pathCsv: String) (implicit spark: SparkSession): Unit = {
 
@@ -20,7 +20,7 @@ class Modulo3 {
       .withColumn("movie_id", split(col("prueba").getItem(2), ":")(1).substr(7, 20))
       .withColumn("duration_watched", split(col("prueba").getItem(3), ":")(1).cast(LongType))
       .select("user_id", "movie_id", "duration_watched")
-    logsDF.show(10)
+//    logsDF.show(10)
 
     // CREAMOS MOVIES DF
     val customSchema = StructType(Array(
@@ -38,16 +38,21 @@ class Modulo3 {
     //    val moviesDFFiltro = Modulo2.limpiezaDFPrecioGenero(moviesDF)
     //    val moviesDFLimpio = Modulo2.reemplazarNulos(moviesDF)
 
-
-    // Hacemos el join entre ambos DF mediante las columnas (movie_id, id)
-    // se hace broadcast join -->
-    val enrichedDF = logsDF.join(broadcast(moviesDF), logsDF("movie_id") === moviesDF("id"), "inner")
-    enrichedDF.show(10)
+    val enrichedDF = crearJoinLogsMovies(logsDF, moviesDF)
 
     // obtener géneros y contar horas de las películas
     val genreMetricsDF = enrichedDF.withColumn("genre", explode(split(col("genres"), "\\|")))
       .groupBy("genre").agg(sum("duration_watched").alias("total_hours"))
     println("=== TOP 5 GENEROS MAS VISTOS ===")
     genreMetricsDF.orderBy(desc("total_hours")).show(5)
+
   }
+
+  def crearJoinLogsMovies(logsDF: DataFrame, moviesDF: DataFrame): DataFrame = {
+    // Hacemos el join entre ambos DF mediante las columnas (movie_id, id)
+    // se hace broadcast join -->
+    logsDF.join(broadcast(moviesDF), logsDF("movie_id") === moviesDF("id"), "inner")
+    //    enrichedDF.show(10)
+  }
+
 }
