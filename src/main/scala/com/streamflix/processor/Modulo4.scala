@@ -73,6 +73,9 @@ object Modulo4 {
     println("TOP 10 Binge Watchers")
     resultadoDF.orderBy(desc("total_maratones")).show(10)
 
+    println("ID de los 3 ususarios más adictos: ")
+    resultadoDF.filter(col("user_id") =!= 999).select("user_id").orderBy(desc("total_maratones")).show(3)
+
   }
 
 }
