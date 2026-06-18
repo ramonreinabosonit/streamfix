@@ -66,6 +66,7 @@ class Modelo1 {
   }
 
   // CREAR FICHERO (Codigo, Cantidad)
+  // HAY QUE MODIFICAR ESTO PARA HACERLO CON SPARK, NO PRINTWRITTER
   def generarFichero(rawLogsRDD: RDD[String]): Unit = {
     val pw = new PrintWriter(Config.ERROR_COUNTS_TXT_PATH)
     val info = rawLogsRDD.filter(x=>x.contains("[INFO]")).count()

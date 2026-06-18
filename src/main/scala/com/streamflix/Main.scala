@@ -2,7 +2,7 @@ package com.streamflix
 
 import configuration.Config
 import org.apache.spark.SparkContext
-import processor.{Modelo1, Modulo2, Modulo3, Modulo4}
+import processor.{Modelo1, Modulo2, Modulo3, Modulo4, Modulo5}
 import org.apache.spark.sql.SparkSession
 
 import java.util.Scanner
@@ -51,6 +51,7 @@ object Main {
         case 2 => Modulo2.iniciarModulo2(pathCsv)
         case 3 => Modulo3.iniciarModulo3(pathTxt, pathCsv)
         case 4 => Modulo4.iniciarModulo4(pathTxt, pathCsv)
+        case 5 => Modulo5.iniciarModulo5(pathCsv)
         case 6 =>
           println("Saliendo del sistema...")
           corriendo = false

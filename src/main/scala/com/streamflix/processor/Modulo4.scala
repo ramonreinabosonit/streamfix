@@ -1,7 +1,7 @@
 package com.streamflix.processor
 
 import org.apache.spark.sql.expressions.Window
-import org.apache.spark.sql.{Column, DataFrame, SparkSession}
+import org.apache.spark.sql.{Column, DataFrame, SaveMode, SparkSession}
 import org.apache.spark.sql.functions.{asc, col, concat, concat_ws, desc, expr, lag, split, sum, to_timestamp, unix_timestamp, when}
 import org.apache.spark.sql.types.LongType
 
@@ -36,11 +36,6 @@ object Modulo4 {
     // los prev_x cogen de la linea anterior, son literalmente el valor de la linea anterior
     // es decir, prev_duracion es null, pero en la segunda linea es el valor duracion de la primera
 
-//    +-------------------+-------+--------+--------+-------------------+-------------+
-//    |          timestamp|user_id|movie_id|duracion|     prev_timestamp|prev_duracion|
-//    +-------------------+-------+--------+--------+-------------------+-------------+
-//    |2025-03-14 12:38:56|      7|    9166|     165|               null|         null|
-//    |2025-03-20 06:27:20|      7|    3577|      47|2025-03-14 12:38:56|          165|
 
     // Cogemos lagDF y agregamos la columna descanso minutos que tiene como valor
     // la resta entre el timestamp de la liena actual menos el prev_timestamp que es el valor
@@ -48,12 +43,6 @@ object Modulo4 {
     // tod0 esto / 60 (MINUTOS) para obtener minutos
     val descansoDF = lagDF.withColumn("descanso_minutos",
       (unix_timestamp(col("timestamp")) - (unix_timestamp(col("prev_timestamp")) + col("prev_duracion")))/60)
-    //    +-------------------+-------+--------+--------+-------------------+-------------+------------------+
-    //    |          timestamp|user_id|movie_id|duracion|     prev_timestamp|prev_duracion|  descanso_minutos|
-    //    +-------------------+-------+--------+--------+-------------------+-------------+------------------+
-    //    |2025-03-14 12:38:56|      7|    9166|     165|               null|         null|              null|
-    //    |2025-03-20 06:27:20|      7|    3577|      47|2025-03-14 12:38:56|          165|           8265.65|
-    //    |2025-03-20 16:08:45|      7|    null|    null|2025-03-20 06:27:20|           47| 580.6333333333333|
 
     // en este paso creamos la columan maraton que tendra como valor 0 o 1
     // 0 si supera los 20 minutos y 1 cuando sea inferior
