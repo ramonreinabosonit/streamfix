@@ -4,5 +4,5 @@ build.sbt
 project/
 
 target/
-src/main/scala/resources/data/server_logs.txt
+src/main/resources/data/server_logs.txt
 data/*

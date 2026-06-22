@@ -4,12 +4,12 @@ object Config {
 
   // Aquí se manejan todas las urls del proyecto
 
-  var SERVER_LOGS_PATH = "C:/Users/ramon.reina/IdeaProjects/streamflix/src/main/scala/resources/data/server_logs.txt"
-  var MOVIES_METADATA_CSV = "C:/Users/ramon.reina/IdeaProjects/streamflix/src/main/scala/resources/data/movies_metadata.csv"
+  val SERVER_LOGS_PATH = "C:/Users/ramon.reina/IdeaProjects/streamflix/src/main/resources/data/server_logs.txt"
+  val MOVIES_METADATA_CSV = "C:/Users/ramon.reina/IdeaProjects/streamflix/src/main/resources/data/movies_metadata.csv"
 
-  var ERROR_COUNTS_TXT_PATH = "C:/Users/ramon.reina/IdeaProjects/streamflix/src/main/scala/resources/output/error_counts.txt"
+  val ERROR_COUNTS_TXT_PATH = "C:/Users/ramon.reina/IdeaProjects/streamflix/src/main/resources/output/error_counts.txt"
 
-  var OUTPUT_MOVIES_PARQUET = "C:/Users/ramon.reina/IdeaProjects/streamflix/src/main/scala/resources/output/analytics_warehouse"
+  val OUTPUT_MOVIES_PARQUET = "C:/Users/ramon.reina/IdeaProjects/streamflix/src/main/resources/output/analytics_warehouse"
 
-  var FICHERO_PARQUET = "C:/Users/ramon.reina/IdeaProjects/streamflix/src/main/scala/resources/output/analytics_warehouse/year=2023/country=US/part-00000-9aa8bc5f-bade-490c-a7da-acdbfd7c58fc.c000.snappy.parquet"
+//  val FICHERO_PARQUET = "C:/Users/ramon.reina/IdeaProjects/streamflix/src/main/resources/output/analytics_warehouse/year=2025/country=DE/.part-00000-a1991aa5-6b8a-4c8c-83c7-44e61d0e5732.c000.snappy.parquet.crc"
 }

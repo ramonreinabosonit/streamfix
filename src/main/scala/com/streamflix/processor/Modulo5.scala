@@ -22,9 +22,9 @@ object Modulo5 {
     // hacemos el objetivo, transformar y hacer particion de las columnas + dejarlo en formato parquet
 //    finalReportDF.write.mode(SaveMode.Overwrite).partitionBy("year", "country").parquet(Config.OUTPUT_MOVIES_PARQUET)
 
-    val ficheroParquet = spark.read.parquet(Config.FICHERO_PARQUET)
+//    val ficheroParquet = spark.read.parquet(Config.FICHERO_PARQUET)
 
-    ficheroParquet.show()
+//    ficheroParquet.show()
 
     println("FICHERO PARQUET CREADO!")
   }
