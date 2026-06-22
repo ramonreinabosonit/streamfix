@@ -20,6 +20,7 @@ object ETLProcessor {
     val rawMoviesDF = readMoviesWithTry(moviesCsvPath)
     /////////////////////////////////////////////////////////////////
 
+
     // Bloque 2, limpieza de datos Logs
     logger.info("Procesando y limpiando los logs raw...")
     val validLogsDF = filterValidLogs(rawLogsDF)

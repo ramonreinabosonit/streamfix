@@ -1,3 +1,17 @@
+# Instalación
+
+Para ejecutar este proyecto es necesario tener instalado la versión 3.3 de Spark y la 2.12 de Scala, además de las variables de entorno HADOOP_HOME y JAVA_HOME.
+
+Posteriormente se ejecutará el siguiente comando para arrancar el jar con spark-submit:
+`spark-submit \
+--class com.streamflix.Main \
+target/scala-2.12/streamflixanalytics_2.12-0.1.jar \
+src/main/resources/data/server_logs.txt \
+src/main/resources/data/movies_metadata.csv \
+src/main/resources/output`
+
+Las rutas deberán de ser cambiadas a las rutas del dispositivo en el que se va a ejecutar la aplicación.
+
 # Proyecto Scala StreamFlix
 
 Módulo 1 Pregunta Reflexiva (Anti-IA):

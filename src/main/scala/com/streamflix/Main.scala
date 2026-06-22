@@ -1,7 +1,6 @@
 package com.streamflix
 
 import configuration.Config
-import org.apache.spark.SparkContext
 import processor.{ETLProcessor, Modelo1, Modulo2, Modulo3, Modulo4, Modulo5}
 import org.apache.spark.sql.SparkSession
 
@@ -28,11 +27,22 @@ object Main {
 //    spark.sparkContext.setLogLevel("ERROR")
     spark.sparkContext.setLogLevel("ERROR")
 
+
     println("Librerías cargadas!")
 
-    val moviesPath = Config.MOVIES_METADATA_CSV
-    val logsPath = Config.SERVER_LOGS_PATH
-    val outputPath = Config.OUTPUT_MOVIES_PARQUET
+
+    // CAMBIARLO PARA RECIBIR ARGUMENTOS, es decir, no tener que editar el programa en cada dispositivo
+//    val moviesPath = Config.MOVIES_METADATA_CSV
+//    val logsPath = Config.SERVER_LOGS_PATH
+//    val outputPath = Config.OUTPUT_MOVIES_PARQUET
+
+    val moviesPath = args(0)
+    val logsPath = args(1)
+    val outputPath = args(2)
+
+    println(s"Ruta de movies$moviesPath")
+
+    // pasarle las rutas al ejecutar
 
     ETLProcessor.iniciarProcessor(logsPath, moviesPath, outputPath)
 
