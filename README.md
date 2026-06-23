@@ -102,7 +102,7 @@ Módulo 5 Validación Manual:
     `/output/analytics_warehouse/year=2023/country=ES/part-0000.parquet
     /output/analytics_warehouse/year=2023/country=US/part-0000.parquet`
 
-![Resultado](C:\Users\ramon.reina\IdeaProjects\streamflix\src\main\resources\screenshots\cap3.png)
+![Resultado](src/main/resources/screenshots/cap3.png)
 
 -    ¿Por qué NO debemos particionar por user_id en este caso? (Pista: Small files problem)
 
