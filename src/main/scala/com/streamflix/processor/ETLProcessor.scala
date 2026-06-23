@@ -148,7 +148,7 @@ object ETLProcessor {
     val resultadoDF = maratonDF.groupBy("user_id").agg(sum("maraton").alias("total_maratones"))
       .withColumn("is_binge", when(col("total_maratones") >= 3, true).otherwise(false))
 
-//     resultadoDF.filter(col("is_binge") === true).orderBy(desc("total_maratones")).show(10)
+     resultadoDF.filter(col("is_binge") === true).orderBy(desc("total_maratones")).show(10)
     resultadoDF
   }
 

@@ -40,12 +40,11 @@ object Main {
     val logsPath = args(1)
     val outputPath = args(2)
 
-    println(s"Ruta de movies$moviesPath")
+//    println(s"Ruta de movies$moviesPath")
 
     // pasarle las rutas al ejecutar
 
     ETLProcessor.iniciarProcessor(logsPath, moviesPath, outputPath)
-
 
 //    val pathTxt = Config.SERVER_LOGS_PATH
 //    val pathCsv = Config.MOVIES_METADATA_CSV
